@@ -159,8 +159,20 @@ const App: React.FC = () => {
 
   // State for the custom interval input
   const [intervalFocused, setIntervalFocused] = useState(false);
+  const [localInterval, setLocalInterval] = useState(opStats.interval.toString());
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // --- Sync local interval with state when it changes externally ---
+  useEffect(() => {
+    setLocalInterval(prev => {
+        const parsed = parseFloat(prev);
+        if (!isNaN(parsed) && parsed === opStats.interval) {
+            return prev;
+        }
+        return opStats.interval.toString();
+    });
+  }, [opStats.interval]);
 
   // --- Helpers ---
   const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -512,14 +524,27 @@ const App: React.FC = () => {
                            {/* Manually implement placeholder logic here since CompactNumberInput is simple */}
                            <input 
                               type="number"
-                              value={!intervalFocused && opStats.interval === 0 ? '' : opStats.interval}
+                              value={!intervalFocused && opStats.interval === 0 ? '' : localInterval}
                               onChange={(e) => {
-                                let val = parseFloat(e.target.value);
+                                let raw = e.target.value;
+                                
+                                // Remove leading zeros logic
+                                if (raw.length > 1 && raw.startsWith('0') && raw[1] !== '.') {
+                                    raw = raw.replace(/^0+/, '');
+                                    if (raw === '') raw = '0';
+                                }
+
+                                setLocalInterval(raw);
+                                
+                                let val = parseFloat(raw);
                                 if (isNaN(val)) val = 0;
-                                setOpStats({...opStats, interval: val});
+                                setOpStats(prev => ({...prev, interval: val}));
                               }}
                               onFocus={() => setIntervalFocused(true)}
-                              onBlur={() => setIntervalFocused(false)}
+                              onBlur={() => {
+                                  setIntervalFocused(false);
+                                  setLocalInterval(opStats.interval.toString());
+                              }}
                               placeholder={!showIntervalLabel ? "基础攻击间隔 (秒)" : ""}
                               className={`w-full bg-transparent font-sans text-xl font-bold focus:outline-none placeholder-arknights-dim/40 transition-colors pb-1 text-arknights-text`}
                            />
