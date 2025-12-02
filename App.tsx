@@ -39,6 +39,12 @@ const IconLoad = () => (
     </svg>
 );
 
+const IconPlay = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+    </svg>
+);
+
 // Updated Interval Templates based on Arknights archetypes
 const INTERVAL_TEMPLATES = [
     { value: 0.78, desc: '斗士' },
@@ -412,6 +418,51 @@ const App: React.FC = () => {
     fileInputRef.current?.click();
   };
 
+  const handleRunScript = () => {
+      // Demo Script: "Rapid Fire Extermination"
+      // Simulating a fast-attacking physical sniper with buffs against a high def enemy
+      
+      setOpStats({
+        atk: 630,
+        atkFlat: 0,
+        globalAtkMod: 6, // Talent
+        atkFlatFinal: 280, // Bard buff
+        interval: 1.0,
+        intervalMod: -0.11, // Attack interval reduction
+        atkSpeed: 15, // Attack speed +
+      });
+
+      setSkillHits([
+        { 
+            id: generateId(), 
+            name: '过载连射', 
+            atkMod: 110, // 110% attack
+            dmgScale: 100, 
+            hits: 5, // 5 hits per attack
+            damageType: DamageType.PHYSICAL 
+        }
+      ]);
+
+      setSkillConfig({
+          mode: SkillMode.DURATION,
+          duration: 15,
+          ammoCount: 0
+      });
+
+      setEnemyStats({
+        hp: 80000,
+        def: 2000, // High defense
+        res: 0,
+        count: 1,
+      });
+
+      setDebuffs({
+        defShreds: [{ id: generateId(), type: ShredType.PERCENT, value: 40 }], // -40% DEF
+        resShreds: [],
+        fragiles: [30], // +30% Fragile
+      });
+  };
+
   // --- Components for Shred Lists ---
   const ShredList = ({ 
       title, 
@@ -527,6 +578,11 @@ const App: React.FC = () => {
                               value={!intervalFocused && opStats.interval === 0 ? '' : localInterval}
                               onChange={(e) => {
                                 let raw = e.target.value;
+                                // Automatically remove leading zeros unless it is "0."
+                                if (raw.length > 1 && raw.startsWith('0') && raw[1] !== '.') {
+                                    raw = raw.replace(/^0+/, '');
+                                    if (raw === '') raw = '0';
+                                }
                                 setLocalInterval(raw);
                                 
                                 let val = parseFloat(raw);
@@ -862,15 +918,21 @@ const App: React.FC = () => {
           {/* System Menu */}
           <section className="bg-arknights-panel border border-arknights-border p-4">
             <h2 className="text-xs font-bold text-arknights-dim uppercase tracking-widest mb-3">系统 // SYSTEM</h2>
-            <div className="grid grid-cols-2 gap-3">
-                 <button onClick={triggerImport} className="flex items-center justify-center gap-2 px-3 py-3 text-xs border border-arknights-dim hover:border-arknights-yellow hover:text-arknights-yellow hover:bg-arknights-yellow/10 transition-all bg-arknights-surface text-arknights-text font-mono uppercase group">
-                     <IconLoad /> 
-                     <span className="group-hover:tracking-wider transition-all">导入 JSON</span>
+            <div className="flex flex-col gap-3">
+                 <button onClick={handleRunScript} className="flex items-center justify-center gap-2 px-3 py-3 text-xs border border-arknights-yellow/40 hover:border-arknights-yellow text-arknights-yellow hover:bg-arknights-yellow/10 transition-all bg-arknights-surface font-mono uppercase group tracking-wider">
+                     <IconPlay /> 
+                     <span>一键运行脚本</span>
                  </button>
-                 <button onClick={handleDownload} className="flex items-center justify-center gap-2 px-3 py-3 text-xs border border-arknights-dim hover:border-arknights-yellow hover:text-arknights-yellow hover:bg-arknights-yellow/10 transition-all bg-arknights-surface text-arknights-text font-mono uppercase group">
-                     <IconSave /> 
-                     <span className="group-hover:tracking-wider transition-all">导出 JSON</span>
-                 </button>
+                 <div className="grid grid-cols-2 gap-3">
+                     <button onClick={triggerImport} className="flex items-center justify-center gap-2 px-3 py-3 text-xs border border-arknights-dim hover:border-arknights-yellow hover:text-arknights-yellow hover:bg-arknights-yellow/10 transition-all bg-arknights-surface text-arknights-text font-mono uppercase group">
+                         <IconLoad /> 
+                         <span className="group-hover:tracking-wider transition-all">导入 JSON</span>
+                     </button>
+                     <button onClick={handleDownload} className="flex items-center justify-center gap-2 px-3 py-3 text-xs border border-arknights-dim hover:border-arknights-yellow hover:text-arknights-yellow hover:bg-arknights-yellow/10 transition-all bg-arknights-surface text-arknights-text font-mono uppercase group">
+                         <IconSave /> 
+                         <span className="group-hover:tracking-wider transition-all">导出 JSON</span>
+                     </button>
+                 </div>
             </div>
           </section>
 
