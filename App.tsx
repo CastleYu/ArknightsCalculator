@@ -527,13 +527,6 @@ const App: React.FC = () => {
                               value={!intervalFocused && opStats.interval === 0 ? '' : localInterval}
                               onChange={(e) => {
                                 let raw = e.target.value;
-                                
-                                // Remove leading zeros logic
-                                if (raw.length > 1 && raw.startsWith('0') && raw[1] !== '.') {
-                                    raw = raw.replace(/^0+/, '');
-                                    if (raw === '') raw = '0';
-                                }
-
                                 setLocalInterval(raw);
                                 
                                 let val = parseFloat(raw);
