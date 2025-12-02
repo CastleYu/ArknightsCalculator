@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>终末地战术计算终端</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Rajdhani:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              arknights: {
+                dark: '#0e0e10',
+                panel: '#151518',
+                surface: '#1e1e24',
+                yellow: '#fbbf24', // Amber-400
+                orange: '#f59e0b', // Amber-500
+                dim: '#52525b',
+                text: '#e4e4e7',
+                border: '#27272a'
+              }
+            },
+            fontFamily: {
+              sans: ['"Noto Sans SC"', 'Rajdhani', 'sans-serif'],
+              mono: ['Roboto Mono', 'monospace'],
+              body: ['Inter', 'sans-serif']
+            },
+            backgroundImage: {
+              'grid-pattern': "linear-gradient(to right, #27272a 1px, transparent 1px), linear-gradient(to bottom, #27272a 1px, transparent 1px)",
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #0e0e10;
+        color: #e4e4e7;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #151518; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #52525b; 
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #fbbf24; 
+      }
+      
+      .clip-corner-br {
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+      }
+      .clip-corner-tl {
+        clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+      }
+      .tech-border {
+        position: relative;
+      }
+      .tech-border::before {
+        content: '';
+        position: absolute;
+        top: -1px; left: -1px;
+        width: 10px; height: 10px;
+        border-top: 2px solid #fbbf24;
+        border-left: 2px solid #fbbf24;
+      }
+      .tech-border::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; right: -1px;
+        width: 10px; height: 10px;
+        border-bottom: 2px solid #fbbf24;
+        border-right: 2px solid #fbbf24;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
