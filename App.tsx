@@ -418,50 +418,6 @@ const App: React.FC = () => {
     fileInputRef.current?.click();
   };
 
-  const handleRunScript = () => {
-      // Demo Script: "Rapid Fire Extermination"
-      // Simulating a fast-attacking physical sniper with buffs against a high def enemy
-      
-      setOpStats({
-        atk: 630,
-        atkFlat: 0,
-        globalAtkMod: 6, // Talent
-        atkFlatFinal: 280, // Bard buff
-        interval: 1.0,
-        intervalMod: -0.11, // Attack interval reduction
-        atkSpeed: 15, // Attack speed +
-      });
-
-      setSkillHits([
-        { 
-            id: generateId(), 
-            name: '过载连射', 
-            atkMod: 110, // 110% attack
-            dmgScale: 100, 
-            hits: 5, // 5 hits per attack
-            damageType: DamageType.PHYSICAL 
-        }
-      ]);
-
-      setSkillConfig({
-          mode: SkillMode.DURATION,
-          duration: 15,
-          ammoCount: 0
-      });
-
-      setEnemyStats({
-        hp: 80000,
-        def: 2000, // High defense
-        res: 0,
-        count: 1,
-      });
-
-      setDebuffs({
-        defShreds: [{ id: generateId(), type: ShredType.PERCENT, value: 40 }], // -40% DEF
-        resShreds: [],
-        fragiles: [30], // +30% Fragile
-      });
-  };
 
   // --- Components for Shred Lists ---
   const ShredList = ({ 
@@ -545,7 +501,7 @@ const App: React.FC = () => {
           {/* Basic Config */}
           <section className="bg-arknights-panel p-4 tech-border shadow-lg">
             <h2 className="text-xs font-bold text-arknights-yellow uppercase tracking-widest border-b border-arknights-yellow/30 pb-2 mb-4">
-               基础规格 // BASIC_SPECS
+               基本数据 // BASIC_DATA
             </h2>
             <div className="grid grid-cols-1 gap-2 mb-4">
               <InputGroup 
@@ -628,7 +584,7 @@ const App: React.FC = () => {
           {/* Skill Inherent Config */}
           <section className="bg-arknights-panel p-4 border border-arknights-border">
             <h2 className="text-xs font-bold text-white uppercase tracking-widest border-b border-arknights-border pb-2 mb-4">
-               技能固有 // SKILL_CONFIG
+               基本加成 // BASIC_MOD
             </h2>
             <div className="grid grid-cols-2 gap-2">
               <div className="col-span-2">
@@ -670,7 +626,7 @@ const App: React.FC = () => {
           {/* Skill Mode Block */}
           <section className="bg-arknights-panel p-4 border border-arknights-border h-fit">
               <h2 className="text-xs font-bold text-white uppercase tracking-widest border-b border-arknights-border pb-2 mb-4">
-                  技能形态 // MODE
+                  技能类型 // MODE
               </h2>
               <div className="flex bg-black/30 p-1 mb-4">
                   {Object.values(SkillMode).map(mode => (
@@ -805,7 +761,7 @@ const App: React.FC = () => {
              {/* Debuff Pipeline & Environment (Moved to Center Column) */}
              <section className="bg-arknights-panel p-4 border border-arknights-border relative">
                 <h2 className="text-xs font-bold text-white uppercase tracking-widest border-b border-arknights-border pb-2 mb-4">
-                  环境与削弱 // ENV_DEBUFF
+                  目标&削弱 // ENV&DEBUFF
                 </h2>
                 
                 {/* Target Stats */}
@@ -877,7 +833,7 @@ const App: React.FC = () => {
              <div className="p-5 grid grid-cols-1 gap-6">
                  {/* DPS Display */}
                  <div className="relative group text-center py-2 border border-arknights-yellow/10 bg-arknights-yellow/5">
-                    <div className="text-arknights-dim font-mono text-[10px] uppercase mb-1 tracking-widest">平均秒伤 (DPS)</div>
+                    <div className="text-arknights-dim font-mono text-[10px] uppercase mb-1 tracking-widest">每秒伤害 DPS</div>
                     <div className="text-6xl font-bold text-arknights-yellow font-sans tracking-tight leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                         {Math.round(result.dps).toLocaleString()}
                     </div>
@@ -885,7 +841,7 @@ const App: React.FC = () => {
 
                  {/* DPH Display */}
                  <div className="bg-black/20 p-3 border-l-2 border-arknights-yellow/50">
-                    <div className="text-arknights-dim font-mono text-[10px] uppercase mb-1">单次总伤 (Cycle Dmg)</div>
+                    <div className="text-arknights-dim font-mono text-[10px] uppercase mb-1">单次伤害 DPH</div>
                     <div className="text-3xl font-bold text-white font-sans tracking-tight">
                         {Math.round(result.dph).toLocaleString()}
                     </div>
@@ -919,10 +875,6 @@ const App: React.FC = () => {
           <section className="bg-arknights-panel border border-arknights-border p-4">
             <h2 className="text-xs font-bold text-arknights-dim uppercase tracking-widest mb-3">系统 // SYSTEM</h2>
             <div className="flex flex-col gap-3">
-                 <button onClick={handleRunScript} className="flex items-center justify-center gap-2 px-3 py-3 text-xs border border-arknights-yellow/40 hover:border-arknights-yellow text-arknights-yellow hover:bg-arknights-yellow/10 transition-all bg-arknights-surface font-mono uppercase group tracking-wider">
-                     <IconPlay /> 
-                     <span>一键运行脚本</span>
-                 </button>
                  <div className="grid grid-cols-2 gap-3">
                      <button onClick={triggerImport} className="flex items-center justify-center gap-2 px-3 py-3 text-xs border border-arknights-dim hover:border-arknights-yellow hover:text-arknights-yellow hover:bg-arknights-yellow/10 transition-all bg-arknights-surface text-arknights-text font-mono uppercase group">
                          <IconLoad /> 
